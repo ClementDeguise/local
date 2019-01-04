@@ -35,9 +35,9 @@ public class xyYtoRGB {
         double distG =  Math.abs(norm - normGreen);
         double distB =  Math.abs(norm - normBlue);
 
-        System.out.println("distR: " + distR);
-        System.out.println("distG: " + distG);
-        System.out.println("distB: " + distB);
+//        System.out.println("distR: " + distR);
+//        System.out.println("distG: " + distG);
+//        System.out.println("distB: " + distB);
 
         double min = Math.min(distR,Math.min(distB,distG));
 

@@ -172,9 +172,9 @@ public class Subscriber implements MqttCallback {
             System.out.println("body: " + body);
             System.out.println(id);
 
-            System.out.println(body.substring(2,7));
+            System.out.println(body.substring(2,6));
 
-            if (body.substring(1, 4).equals("name")) {
+            if (body.substring(2, 6).equals("name")) {
                 putRequest = httpRequest.PutRequest("lights/" + id, body);
 
                 getRequest = httpRequest.GetRequest("lights/" + id);
