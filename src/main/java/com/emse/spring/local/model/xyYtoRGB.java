@@ -25,15 +25,20 @@ public class xyYtoRGB {
 
 
 
-        Double normeRed = sqrt(Math.pow(Red[0],2) + Math.pow(Red[1],2));
-        Double normeGreen = sqrt(Math.pow(Green[0],2) + Math.pow(Green[1],2));
-        Double normeBlue = sqrt(Math.pow(Blue[0],2) + Math.pow(Blue[1],2));
+        Double normRed = sqrt(Math.pow(Red[0],2) + Math.pow(Red[1],2));
+        Double normGreen = sqrt(Math.pow(Green[0],2) + Math.pow(Green[1],2));
+        Double normBlue = sqrt(Math.pow(Blue[0],2) + Math.pow(Blue[1],2));
 
-        Double norme = sqrt(Math.pow(x,2) + Math.pow(y,2));
+        Double norm = sqrt(Math.pow(x,2) + Math.pow(y,2));
 
-        double distR =  norme - normeRed;
-        double distG =  norme - normeGreen;
-        double distB =  norme - normeBlue;
+        double distR =  Math.abs(norm - normRed);
+        double distG =  Math.abs(norm - normGreen);
+        double distB =  Math.abs(norm - normBlue);
+
+        System.out.println("distR: " + distR);
+        System.out.println("distG: " + distG);
+        System.out.println("distB: " + distB);
+
         double min = Math.min(distR,Math.min(distB,distG));
 
         if (min == distR) {

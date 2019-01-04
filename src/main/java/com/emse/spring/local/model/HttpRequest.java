@@ -112,15 +112,15 @@ public class HttpRequest {
         //System.out.println(getRequest);
         if (getRequest != null) {
 
-            JSONObject json = new JSONObject("{\"9\": {" +
-                    "\"state\": {\"on\": true,\"bri\": 254,\"hue\": 8418,\"sat\": 140,\"effect\": \"none\",\"xy\": [0.4573, 0.4100],\"ct\": 366,\"alert\": \"none\",\"colormode\": \"ct\",\"mode\": \"homeautomation\",\"reachable\": true}," +
+//            JSONObject json = new JSONObject("{\"9\": {" +
+//                    "\"state\": {\"on\": true,\"bri\": 254,\"hue\": 8418,\"sat\": 140,\"effect\": \"none\",\"xy\": [0.4573, 0.4100],\"ct\": 366,\"alert\": \"none\",\"colormode\": \"ct\",\"mode\": \"homeautomation\",\"reachable\": true}," +
+//
+//                    "\"type\": \"Extended color light\"," +
+//                    "\"name\": \"2\"," +
+//                    "}}");
 
-                    "\"type\": \"Extended color light\"," +
-                    "\"name\": \"2\"," +
-                    "}}");
 
-
-            //JSONObject json = new JSONObject();
+            JSONObject json = new JSONObject(getRequest);
             // 2 possibilitie	s : global or local
             JSONObject light;
             boolean on;
@@ -137,13 +137,16 @@ public class HttpRequest {
             //System.out.println(json);
 
             //TODO : vérifier que le get global marche
+            //TODO couleur à 0 = lampe eteinte, mais renvoi quand meme ff000, gestion exeptions
 
             if (id.equals("ALL")) {
 
+                //System.out.println(json);
                 String iteration = Integer.toString(iter);
 
                 light = json.getJSONObject(iteration);
 
+                System.out.println(light);
                 on = light.getJSONObject("state").getBoolean("on");
                 sat = light.getJSONObject("state").getInt("sat");
                 XYZ = light.getJSONObject("state").getJSONArray("xy");
@@ -180,12 +183,14 @@ public class HttpRequest {
 
 
             } else {
-                light = json.getJSONObject(id);
 
-                on = light.getJSONObject("state").getBoolean("on");
-                sat = light.getJSONObject("state").getInt("sat");
-                XYZ = light.getJSONObject("state").getJSONArray("xy");
-                name = light.getString("name");
+                System.out.println(json);
+                //light = json.getJSONObject(id);
+
+                on = json.getJSONObject("state").getBoolean("on");
+                sat = json.getJSONObject("state").getInt("sat");
+                XYZ = json.getJSONObject("state").getJSONArray("xy");
+                name = json.getString("name");
 
                 x = XYZ.getDouble(0);
                 y = XYZ.getDouble(1);
@@ -196,7 +201,8 @@ public class HttpRequest {
                 sendBack = "JSON/{\"id\": " + id + ",\"color\": " + "\"" + color + "\"" + ",\"status\": " + "\"" + status + "\"" + ",\"roomId\": " + name + ",\"saturation\": " + sat + "}";
                 //s.sendMessage("sendBack", "sender");
                 //System.out.println(sendBack);
-                //TODO : verifier que la réponse de l'api aux PUTS et GET id est bien identique
+
+                //TODO : mauvais roomId a handle
             }
 
         }

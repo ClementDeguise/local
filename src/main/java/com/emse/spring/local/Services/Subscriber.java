@@ -3,6 +3,7 @@ package com.emse.spring.local.Services;
 
 
 import com.emse.spring.local.model.HttpRequest;
+import com.emse.spring.local.model.xyYtoRGB;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
@@ -26,7 +27,7 @@ public class Subscriber implements MqttCallback {
     public String username = "Local";
     public String password = "aaa";
     public String getRequest;
-    //public String putRequest = null;
+    public String putRequest;
     public String id = "0";
 
 
@@ -131,16 +132,19 @@ public class Subscriber implements MqttCallback {
                 getRequest = httpRequest.GetRequest("lights/");
 
 
-                String sendBack = httpRequest.JsonResponseFormatting(getRequest, id, 1);
-                if (sendBack != null) {
-                    sendMessage(sendBack, "answer");
-                }
+//                String sendBack = httpRequest.JsonResponseFormatting(getRequest, id, 1);
+//                if (sendBack != null) {
+//                    sendMessage(sendBack, "answer");
+//                }
 
-                for (int i = 3; i <= 9; i++) {
-                    sendBack = httpRequest.JsonResponseFormatting(getRequest, id, i);
+                int[] num = {1,3,4,5,6,7,8,9};
+                for (int i : num) {
+                    System.out.println(i);
+                    String sendBack = httpRequest.JsonResponseFormatting(getRequest, id, i);
                     if (sendBack != null) {
                         sendMessage(sendBack, "answer");
                     }
+                    System.out.println(i);
                 }
 
 
@@ -148,7 +152,7 @@ public class Subscriber implements MqttCallback {
             } else {
                /// getRequest = httpRequest.GetRequest("lights/" + remains);
                 //pass id for json response
-                getRequest = "test passed";
+                getRequest = httpRequest.GetRequest("lights/" + remains);
                 String sendBack = httpRequest.JsonResponseFormatting(getRequest, id, 0);
                 if (sendBack != null) {
                     sendMessage(sendBack,"answer");
@@ -162,21 +166,59 @@ public class Subscriber implements MqttCallback {
 
         else if (method.equals("PUT")) {
 
-            id = remains.substring(0, 2);
+            id = remains.substring(0, 1);
             String body = remains.substring(remains.indexOf("{"));
             //body always contains only 1 variable to change
             System.out.println("body: " + body);
+            System.out.println(id);
+
+            System.out.println(body.substring(2,7));
 
             if (body.substring(1, 4).equals("name")) {
-                getRequest = httpRequest.PutRequest("lights/" + id, body);
+                putRequest = httpRequest.PutRequest("lights/" + id, body);
+
+                getRequest = httpRequest.GetRequest("lights/" + id);
+                String sendBack = httpRequest.JsonResponseFormatting(getRequest, id, 0);
+                if (sendBack != null) {
+                    sendMessage(sendBack, "answer");
+                }
+                //requestId = Integer.parseInt(id);
+                System.out.println("RESPONSE: " + getRequest);
+            }
+
+
+            else if (body.substring(2, 7).equals("color")) {
+
+                String color = body.substring(body.indexOf("#"),body.indexOf("#")+7);
+                System.out.println(color);
+
+                xyYtoRGB xy = new xyYtoRGB();
+                Double[] XY = xy.ToXY(color);
+
+                System.out.println(XY[0]);
+                System.out.println(XY[1]);
+
+
+                String hex = "{\"xy\" : " + "[" + XY[0] + ", " + XY[1] + "]" + "}";
+                System.out.println(hex);
+
+                putRequest = httpRequest.PutRequest("lights/" + id + "/state", hex);
+
+                getRequest = httpRequest.GetRequest("lights/" + id);
                 String sendBack = httpRequest.JsonResponseFormatting(getRequest, id,0);
                 if (sendBack != null) {
                     sendMessage(sendBack, "answer");
                 }
                 //requestId = Integer.parseInt(id);
                 System.out.println("RESPONSE: " + getRequest);
+
+
             } else {
-                getRequest = httpRequest.PutRequest("lights/" + id + "/state", body);
+                putRequest = httpRequest.PutRequest("lights/" + id + "/state", body);
+
+
+                System.out.println("RESPONSE: " + putRequest);
+                getRequest = httpRequest.GetRequest("lights/" + id);
                 String sendBack = httpRequest.JsonResponseFormatting(getRequest, id,0);
                 if (sendBack != null) {
                     sendMessage(sendBack, "answer");
