@@ -125,8 +125,9 @@ public class HttpRequest {
             JSONObject light;
             boolean on;
             int sat;
+            int bri;
             JSONArray XYZ;
-            String name;
+            //String name;
             double x;
             double y;
             String color;
@@ -136,31 +137,32 @@ public class HttpRequest {
 
             //System.out.println(json);
 
-            //TODO : vérifier que le get global marche
+
 
             if (id.equals("ALL")) {
 
                 //System.out.println(json);
                 String iteration = Integer.toString(iter);
 
-                light = json.getJSONObject(iteration);
+                //light = json.getJSONObject(iteration);
 
-                System.out.println(light);
-                on = light.getJSONObject("state").getBoolean("on");
-                sat = light.getJSONObject("state").getInt("sat");
-                XYZ = light.getJSONObject("state").getJSONArray("xy");
-                name = light.getString("name");
+                //System.out.println(light);
+                on = json.getJSONObject("state").getBoolean("on");
+                sat = json.getJSONObject("state").getInt("sat");
+                XYZ = json.getJSONObject("state").getJSONArray("xy");
+                //name = json.getString("name");
+                bri = json.getJSONObject("state").getInt("bri");
 
                 status = on ? "ON": "OFF";
 
                 x = XYZ.getDouble(0);
                 y = XYZ.getDouble(1);
-                color = xy.ToHex(x,y);
+                color = xy.ToHex(x,y,bri);
 
                 //name is actually the id
 
                 // use objectmapper for prettier code
-                sendBack = "JSON/{\"id\": " + iter + ",\"color\": " + color + ",\"status\": " + status + ",\"roomId\": " + name + ",\"saturation\": " + sat + "}";
+                sendBack = "JSON/{\"id\": " + iter + ",\"color\": " + "\"" +  color + "\"" + ",\"status\": " + "\"" + status + "\"" +  ",\"roomId\": " + "1" + ",\"saturation\": " + sat + "}";
                 //s.sendMessage("sendBack", "sender");
 
 //                for (int i = 3; i <= 9; i++) {
@@ -189,19 +191,20 @@ public class HttpRequest {
                 on = json.getJSONObject("state").getBoolean("on");
                 sat = json.getJSONObject("state").getInt("sat");
                 XYZ = json.getJSONObject("state").getJSONArray("xy");
-                name = json.getString("name");
+                //name = json.getString("name");
+                bri = json.getJSONObject("state").getInt("bri");
 
                 x = XYZ.getDouble(0);
                 y = XYZ.getDouble(1);
-                color = xy.ToHex(x,y);
+                color = xy.ToHex(x,y, bri);
 
                 status = on ? "ON": "OFF";
 
-                sendBack = "JSON/{\"id\": " + id + ",\"color\": " + "\"" + color + "\"" + ",\"status\": " + "\"" + status + "\"" + ",\"roomId\": " + name + ",\"saturation\": " + sat + "}";
+                sendBack = "JSON/{\"id\": " + id + ",\"color\": " + "\"" + color + "\"" + ",\"status\": " + "\"" + status + "\"" + ",\"roomId\": " + "1" + ",\"saturation\": " + sat + "}";
                 //s.sendMessage("sendBack", "sender");
                 //System.out.println(sendBack);
 
-                //TODO : mauvais roomId a handle
+
             }
 
         }
