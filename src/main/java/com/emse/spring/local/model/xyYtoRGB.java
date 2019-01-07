@@ -18,10 +18,13 @@ public class xyYtoRGB {
 
     public String ToHex(Double x, Double y) {
 
+        if (x == 0.0 && y == 0.0) return "#000000";
+
         // For the hue bulb the corners of the triangle are:
         Double[] Red = {0.675, 0.322};
         Double[] Green = {0.4091, 0.518};
         Double[] Blue = {0.167, 0.04};
+
 
 
 
@@ -88,6 +91,8 @@ public class xyYtoRGB {
 
     public Double[] ToXY(String hex) {
 
+        if (hex.equals("#000000")) return new Double[] {0.0, 0.0};
+
         Double[] Red = {0.675, 0.322};
         Double[] Green = {0.4091, 0.518};
         Double[] Blue = {0.167, 0.04};
@@ -101,23 +106,23 @@ public class xyYtoRGB {
         int g = Integer.parseInt(hex.substring(2,4),16);
         int b = Integer.parseInt(hex.substring(4,6),16);
 
-        if (r == 255) {
-            return Red;
-        }
 
-        else if (g == 255) {
-            return Green;
-        }
+        int diffR = 255 - r;
+        int diffG = 255 - g;
+        int diffB = 255 - b;
 
-        else if (b == 255) {
-            return Blue;
-        }
 
+        if (diffR == 0) return Red;
+        else if (diffG == 0) return Green;
+        else if (diffB == 0) return Blue;
         else {
-            return new Double[] {0.0, 0.0};
+            double min = Math.min(diffR,Math.min(diffB,diffG));
+            if (min == diffR) return Red;
+            else if (min == diffG) return Green;
+            else return Blue;
         }
 
-        //TODO : hex to xy à tester
+
 //        Double r = (double) R/255;
 //        Double g = (double) G/255;
 //        Double b = (double) B/255;

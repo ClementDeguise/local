@@ -25,7 +25,7 @@ public class LocalApplication {
 			Subscriber s = new Subscriber("tcp://m20.cloudmqtt.com:15247", "sender", "answer");
             //Subscriber su = new Subscriber("tcp://m20.cloudmqtt.com:15247", "answer", "LocalServer2");
 
-			//s.sendMessage("DEL/9", "sender");
+			s.sendMessage("JSON/{\"id\": 9,\"color\": \"#fff000\",\"status\": \"ON\",\"roomId\": 2,\"saturation\": 100}", "answer");
 
 
 

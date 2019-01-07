@@ -137,7 +137,6 @@ public class HttpRequest {
             //System.out.println(json);
 
             //TODO : vérifier que le get global marche
-            //TODO couleur à 0 = lampe eteinte, mais renvoi quand meme ff000, gestion exeptions
 
             if (id.equals("ALL")) {
 

@@ -129,7 +129,7 @@ public class Subscriber implements MqttCallback {
             //default get request
             if (remains.equals("ALL")) {
                 //response
-                getRequest = httpRequest.GetRequest("lights/");
+
 
 
 //                String sendBack = httpRequest.JsonResponseFormatting(getRequest, id, 1);
@@ -140,6 +140,7 @@ public class Subscriber implements MqttCallback {
                 int[] num = {1,3,4,5,6,7,8,9};
                 for (int i : num) {
                     System.out.println(i);
+                    getRequest = httpRequest.GetRequest("lights/" + i);
                     String sendBack = httpRequest.JsonResponseFormatting(getRequest, id, i);
                     if (sendBack != null) {
                         sendMessage(sendBack, "answer");
